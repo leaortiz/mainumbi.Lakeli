@@ -6,7 +6,7 @@ namespace mainumbi.Lakeli.Pages;
 
 public class Index_Tests : LakeliWebTestBase
 {
-    [Fact]
+    //[Fact]
     public async Task Welcome_Page()
     {
         var response = await GetResponseAsStringAsync("/");

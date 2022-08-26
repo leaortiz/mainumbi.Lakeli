@@ -38,6 +38,7 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Localization.ExceptionHandling;
 
 namespace mainumbi.Lakeli.Web;
 
@@ -86,6 +87,7 @@ public class LakeliWebModule : AbpModule
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
+        ConfigureLocalizationErrorCodes(context.Services);
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -121,6 +123,14 @@ public class LakeliWebModule : AbpModule
             });
 
         context.Services.ForwardIdentityAuthenticationForBearer();
+    }
+
+    private void ConfigureLocalizationErrorCodes(IServiceCollection services)
+    {
+        services.Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace("Mainumbi.Lakeli", typeof(LakeliResource));
+        });
     }
 
     private void ConfigureAutoMapper()
