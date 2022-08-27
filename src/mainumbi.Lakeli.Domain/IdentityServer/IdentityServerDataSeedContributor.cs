@@ -183,7 +183,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
         }
     }
 
-    private async Task<Client> CreateClientAsync(
+    private async Task<Volo.Abp.IdentityServer.Clients.Client> CreateClientAsync(
         string name,
         IEnumerable<string> scopes,
         IEnumerable<string> grantTypes,
@@ -201,7 +201,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
         if (client == null)
         {
             client = await _clientRepository.InsertAsync(
-                new Client(
+                new Volo.Abp.IdentityServer.Clients.Client(
                     _guidGenerator.Create(),
                     name
                 )

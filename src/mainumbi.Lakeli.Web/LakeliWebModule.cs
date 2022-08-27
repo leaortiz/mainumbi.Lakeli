@@ -147,7 +147,7 @@ public class LakeliWebModule : AbpModule
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                    options.FileSets.ReplaceEmbeddedByPhysical<LakeliDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}mainumbi.Lakeli.Domain.Shared"));
+                options.FileSets.ReplaceEmbeddedByPhysical<LakeliDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}mainumbi.Lakeli.Domain.Shared"));
                 options.FileSets.ReplaceEmbeddedByPhysical<LakeliDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}mainumbi.Lakeli.Domain"));
                 options.FileSets.ReplaceEmbeddedByPhysical<LakeliApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}mainumbi.Lakeli.Application.Contracts"));
                 options.FileSets.ReplaceEmbeddedByPhysical<LakeliApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}mainumbi.Lakeli.Application"));
