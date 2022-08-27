@@ -21,7 +21,7 @@ namespace mainumbi.Lakeli
         [MaxLength(100)]
         public string Adress { get; protected set; }
         public Laborer Laborer { get; protected set; }
-        public Guid HouseAdminId { get; protected set; }
+        public Guid UserId { get; protected set; }
         public Rating Rating { get; protected set; }
 
         internal void SetRating(Rating rating)
@@ -50,11 +50,11 @@ namespace mainumbi.Lakeli
         {
 
         }
-        public Job(Guid id, Customer houseAdmin)
+        public Job(Guid id, Guid userId)
         {
             Id = id;
             State = JobState.Open;
-            HouseAdminId = houseAdmin.Id;
+            UserId = userId;
         }
 
         public Job SetState(JobState newState)
@@ -72,6 +72,20 @@ namespace mainumbi.Lakeli
         public Job SetLabourer(Laborer laborer)
         {
             Laborer = laborer ?? throw new ArgumentNullException(nameof(laborer));
+
+            return this;
+        }
+
+        internal Job RateJob(Rating rating)
+        {
+            SetRating(rating);
+            return this;
+        }
+
+        internal Job CancelJob()
+        {
+            SetState(JobState.Canceled);
+            SetLabourer(null);
 
             return this;
         }

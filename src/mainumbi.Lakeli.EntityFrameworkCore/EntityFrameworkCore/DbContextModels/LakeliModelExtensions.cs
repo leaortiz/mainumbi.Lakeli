@@ -28,14 +28,6 @@ public static class LakeliModelExtensions
         });
     }
 
-    public static void ConfigureCustomer(this ModelBuilder builder)
-    {
-        builder.Entity<Customer>(b =>
-        {
-            b.ToTable(LakeliConsts.DbTablePrefix + ".Customer");
-            b.ConfigureByConvention();
-        });
-    }
 
     public static void ConfigureRating(this ModelBuilder builder)
     {

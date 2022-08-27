@@ -12,5 +12,6 @@ public class LakeliApplicationAutoMapperProfile : Profile
          * into multiple profile classes for a better organization. */
 
         CreateMap<Job, JobDto>();
+        CreateMap<UpdateJobInput, Job>();
     }
 }

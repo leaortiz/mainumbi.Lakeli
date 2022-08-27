@@ -6,4 +6,7 @@ public static class LakeliDomainErrorCodes
     public static string OneApplyPerJob = "Mainumbi.Lakeli:010001";
     public static string NotYourJob = "Mainumbi.Lakeli:010002";
     public static string JobMustBeAssigned = "Mainumbi.Lakeli:010003";
+    public static string JobNotFound = "Mainumbi.Lakeli:010004";
+
+
 }

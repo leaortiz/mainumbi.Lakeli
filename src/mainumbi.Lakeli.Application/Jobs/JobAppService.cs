@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 
 namespace mainumbi.Lakeli.Jobs
@@ -19,38 +20,48 @@ namespace mainumbi.Lakeli.Jobs
             _jobManager = jobManager;
         }
 
-        public async Task<JobDto> Create([FromBody]CreateJobInput input)
+        public async Task<JobDto> Create([FromBody] CreateJobInput input)
         {
-           Customer customer = new(GuidGenerator.Create());
-           var job = await _jobManager
-                                .CreateAsync(GuidGenerator.Create(),
-                                               customer, 
-                                               input.Comment, 
-                                               input.ContactNumber, 
-                                               input.Adress);
+            var job = await _jobManager
+                                 .CreateAsync(GuidGenerator.Create(),
+                                                GuidGenerator.Create(),
+                                                input.Comment,
+                                                input.ContactNumber,
+                                                input.Adress);
             job = await _jobRepo.InsertAsync(job);
             return ObjectMapper.Map<Job, JobDto>(job);
         }
 
-        public Task Delete(Guid jobId)
+        public async Task Delete([FromQuery] Guid jobId)
         {
-            throw new NotImplementedException();
+            var job = await _jobRepo.FindAsync(j => j.Id == jobId);
+            await _jobRepo.DeleteAsync(job);
         }
 
-        public async Task<List<JobDto>> GetJobs([FromQuery]JobState? state = null)
+        public async Task<List<JobDto>> GetJobs([FromQuery] JobState? state = null)
         {
+            
             var jobs = await _jobManager.GetJobsAsync(state);
             return ObjectMapper.Map<List<Job>, List<JobDto>>(jobs);
         }
 
-        public Task<JobDto> GetJob(Guid jobId)
+        public async Task<JobDto> GetJob([FromQuery] Guid jobId)
         {
-            throw new NotImplementedException();
+            var job = await _jobRepo.FindAsync(j => j.Id == jobId);
+            return ObjectMapper.Map<Job, JobDto>(job);
         }
 
-        public Task<JobDto> Update(UpdateJobInput input)
+        public async Task<JobDto> Update([FromBody] UpdateJobInput input)
         {
-            throw new NotImplementedException();
+            var job = await _jobRepo.FindAsync(j => j.Id == input.JobId);
+            if (job != null)
+            {
+                job = ObjectMapper.Map(input, job);
+                await _jobRepo.UpdateAsync(job);
+                return ObjectMapper.Map<Job, JobDto>(job); ;
+            }
+
+            throw new BusinessException(LakeliDomainErrorCodes.JobNotFound);
         }
     }
 }

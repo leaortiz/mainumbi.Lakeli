@@ -25,7 +25,6 @@ public class LakeliDbContext :
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
-    public DbSet<Customer> HouseAdmins { get; set; }
     public DbSet<Rating> Ratings { get; set; }
     public DbSet<Laborer> Laborers { get; set; }
     public DbSet<Job> Jobs { get; set; }
@@ -79,7 +78,6 @@ public class LakeliDbContext :
         builder.ConfigureTenantManagement();
 
         builder.ConfigureJob();
-        builder.ConfigureCustomer();
         builder.ConfigureLaborer();
         builder.ConfigureRating();
     }

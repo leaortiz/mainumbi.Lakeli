@@ -33,7 +33,7 @@ namespace mainumbi.Lakeli
             Comment = comment ?? throw new ArgumentNullException(nameof(comment));
             LaborerId = job.Laborer.Id;
             JobId = job.Id;
-            HouseAdminId = job.HouseAdminId;
+            HouseAdminId = job.UserId;
         }
     }
 }

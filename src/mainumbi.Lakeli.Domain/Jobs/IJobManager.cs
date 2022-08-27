@@ -7,7 +7,7 @@ namespace mainumbi.Lakeli
 {
     public interface IJobManager
     {
-        Task<Job> CreateAsync(Guid newId, Customer customer, string comment, string contactNumber, string adress);
-        Task<List<Job>> GetJobsAsync(JobState? state = null);
+        Task<Job> CreateAsync(Guid newId, Guid userId, string comment, string contactNumber, string adress);
+        Task<List<Job>> GetJobsAsync(JobState? state = null, Guid? userID = null);
     }
 }

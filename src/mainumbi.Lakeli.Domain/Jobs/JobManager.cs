@@ -17,19 +17,22 @@ namespace mainumbi.Lakeli.HouseAdmins
             _jobRepo = jobRepo;
         }
 
-        public async Task<List<Job>> GetJobsAsync(JobState? state = null)
+        public async Task<List<Job>> GetJobsAsync(JobState? state = null, Guid? userID = null)
         {
             var query = await _jobRepo.GetQueryableAsync();
 
             if(state != null)
                 query = query.Where(x => x.State == state);
 
+            if (state != null)
+                query = query.Where(x => x.UserId == userID);
+
             return query.Where(j => j.State == JobState.Open).ToList();
         }
 
-        public Task<Job> CreateAsync(Guid newId, Customer customer, string comment, string contactNumber, string adress)
+        public Task<Job> CreateAsync(Guid newId, Guid userId, string comment, string contactNumber, string adress)
         {
-            Job job = new(newId, customer);
+            Job job = new(newId, userId);
             job.SetComment(comment)
                .SetContactNumber(contactNumber) 
                .SetAdress(adress);
