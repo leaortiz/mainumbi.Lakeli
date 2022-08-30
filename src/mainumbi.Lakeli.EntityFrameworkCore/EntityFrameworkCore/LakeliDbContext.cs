@@ -25,6 +25,10 @@ public class LakeliDbContext :
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
+    public DbSet<Rating> Ratings { get; set; }
+    public DbSet<Laborer> Laborers { get; set; }
+    public DbSet<Job> Jobs { get; set; }
+
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityDbContext and ITenantManagementDbContext
@@ -46,7 +50,7 @@ public class LakeliDbContext :
     public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
     public DbSet<IdentityLinkUser> LinkUsers { get; set; }
 
-    // Tenant Management
+    //Tenant Management
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
@@ -73,13 +77,8 @@ public class LakeliDbContext :
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
 
-        /* Configure your own tables/entities inside here */
-
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(LakeliConsts.DbTablePrefix + "YourEntities", LakeliConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.ConfigureJob();
+        builder.ConfigureLaborer();
+        builder.ConfigureRating();
     }
 }

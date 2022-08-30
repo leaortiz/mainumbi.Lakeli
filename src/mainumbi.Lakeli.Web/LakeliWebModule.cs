@@ -38,6 +38,9 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Localization.ExceptionHandling;
+using System.Linq;
+using Microsoft.AspNetCore.Cors;
 
 namespace mainumbi.Lakeli.Web;
 
@@ -86,6 +89,30 @@ public class LakeliWebModule : AbpModule
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
+        ConfigureLocalizationErrorCodes(context.Services);
+        ConfigureCors(context, configuration, hostingEnvironment);
+    }
+
+    private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
+    {
+        context.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder
+                    .WithOrigins(
+                        configuration["App:CorsOrigins"]
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.RemovePostFix("/"))
+                            .ToArray()
+                    )
+                    .WithAbpExposedHeaders()
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -123,6 +150,14 @@ public class LakeliWebModule : AbpModule
         context.Services.ForwardIdentityAuthenticationForBearer();
     }
 
+    private void ConfigureLocalizationErrorCodes(IServiceCollection services)
+    {
+        services.Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace("Mainumbi.Lakeli", typeof(LakeliResource));
+        });
+    }
+
     private void ConfigureAutoMapper()
     {
         Configure<AbpAutoMapperOptions>(options =>
@@ -137,7 +172,7 @@ public class LakeliWebModule : AbpModule
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                    options.FileSets.ReplaceEmbeddedByPhysical<LakeliDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}mainumbi.Lakeli.Domain.Shared"));
+                options.FileSets.ReplaceEmbeddedByPhysical<LakeliDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}mainumbi.Lakeli.Domain.Shared"));
                 options.FileSets.ReplaceEmbeddedByPhysical<LakeliDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}mainumbi.Lakeli.Domain"));
                 options.FileSets.ReplaceEmbeddedByPhysical<LakeliApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}mainumbi.Lakeli.Application.Contracts"));
                 options.FileSets.ReplaceEmbeddedByPhysical<LakeliApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}mainumbi.Lakeli.Application"));
