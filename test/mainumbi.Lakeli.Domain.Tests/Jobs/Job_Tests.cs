@@ -9,13 +9,13 @@ using Xunit;
 
 namespace mainumbi.Lakeli.Samples
 {
-    public class HouseAdmin_Tests
+    public class Job_Tests
     {
         Job _job { get; set; }
         Laborer _laborer { get; set; }
 
         [Fact]  
-        public void House_Admin_Can_Post_New_Cleaning_Job()
+        public void Will_Create_A_New_Job()
         {
             Job job = new(Guid.NewGuid(), Guid.NewGuid());
 
@@ -23,7 +23,7 @@ namespace mainumbi.Lakeli.Samples
         }
 
         [Fact]
-        public void House_Admin_Can_Finish_Job()
+        public void Will_Finish_Job()
         {
             JobWithLaborer();
 
@@ -36,24 +36,23 @@ namespace mainumbi.Lakeli.Samples
         }
 
         [Fact]
-        public void House_Admin_Will_Cancel_Job()
+        public void Will_Cancel_Job()
         {
-            AdminWithJob();
-
+            JobWithLaborer();
+            _job.CancelJob();
             _job.State.ShouldBe(JobState.Canceled);
         }
 
         private void JobWithLaborer()
         {
-            AdminWithJob();
+            CreateJob();
 
             _laborer = new(Guid.NewGuid());
             _job.SetLabourer(_laborer);
         }
 
-        private void AdminWithJob()
+        private void CreateJob()
         {
-
             _job = new(Guid.NewGuid(), Guid.NewGuid());
         }
     }

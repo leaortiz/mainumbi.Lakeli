@@ -71,7 +71,7 @@ namespace mainumbi.Lakeli
         }
         public Job SetLabourer(Laborer laborer)
         {
-            Laborer = laborer ?? throw new ArgumentNullException(nameof(laborer));
+            Laborer = laborer;
 
             return this;
         }
@@ -85,7 +85,6 @@ namespace mainumbi.Lakeli
         internal Job CancelJob()
         {
             SetState(JobState.Canceled);
-            SetLabourer(null);
 
             return this;
         }
