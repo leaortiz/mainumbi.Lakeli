@@ -255,6 +255,7 @@ public class LakeliWebModule : AbpModule
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseCors();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
 
